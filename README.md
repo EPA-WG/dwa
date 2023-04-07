@@ -12,18 +12,40 @@ A declarative approach to web application development (without JavaScript) has a
 * [Benefits](#benefits)
   * [Security Considerations](#security-considerations)
   * [Performance](#performance)
-    * [Adoptable transformation layers](#adoptable-transformation-layers)
-  * [Developer Experience (DX) and Development Efficiency (DE)](#dx-de)
+        * [Adoptable transformation layers](#adoptable-transformation-layers)
+  * [Developer Experience (DX) and Development Efficiency (DE)](#developer-experience-dx-and-development-efficiency-de)
+* DWA Stack
+  * Heritage
+  * Truly Unified Resource Identifier (URI)
+        * The deviation from current URI W3C definition
+        * Trust and resources certification
+* Declarative Custom Elements
+* Page and DCE
+* Module loader and mapping
+* Libraries support
+* Data Access Layer (DAL)
+* Data Source Declaration
+* Inline data island
+* HTTP request
+* Storage
+* Data Request
+* Data Response
+* Consistent access to object models
+* Transformation pipeline
+* Data Request
+* Data transformation and UI transformation pipeline
+* DR & DT sharing across transformations
+* Strict type check
+* Semver on API
+* Data Versioning with version change polyfills
+* Templating
+* Forms
+* Form states
+* Form validation
+* External resources
+* Form output
+* Links
 
-2. [Example2](#example2)
-3. [Third Example](#third-example)
-4. [Fourth Example](#fourth-examplehttpwwwfourthexamplecom)
-
-
-# Benefits
-## Example2
-## Third Example
-## [Fourth Example](http://www.fourthexample.com) 
 
 # Benefits
 The advantages of Declarative Web Application (DWA) development for the vendor/browser implementer include extra security, performance, 
