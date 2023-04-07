@@ -13,38 +13,38 @@ A declarative approach to web application development (without JavaScript) has a
   * [Security Considerations](#security-considerations)
     * [Performance](#performance)
       * [Adoptable transformation layers](#adoptable-transformation-layers)
-  * [Developer Experience (DX) and Development Efficiency (DE)](#developer-experience-dx-and-development-efficiency-de)
-* DWA Stack
-  * Heritage
-  * Truly Unified Resource Identifier (URI)
-    * The deviation from current [URI W3C](https://www.w3.org/wiki/URI) definition
-    * Trust and resources certification
-  * Declarative Custom Elements
-    * Page and DCE
-  * Module loader and mapping
-  * Libraries support
-  * Data Access Layer (DAL)
-    * Data Source Declaration
-      * Inline data island
-      * HTTP request
-      * Storage
-    * Data Request
-    * Data Response
-  * Consistent access to object models
-  * Transformation pipeline
-    * Data Request
-    * Data transformation and UI transformation pipeline
-    * DR & DT sharing across transformations
-    * Strict type check
-    * Semver on API
-    * Data Versioning with version change polyfills
-  * Templating
-  * Forms
-    * Form states
-    * Form validation
-      * External resources
-    * Form output
-* Links
+  * [Developer Experience (DX) and Development Efficiency (DE)](#developer-experience--dx--and-development-efficiency--de-)
+* [DWA Stack](#dwa-stack)
+  * [Heritage](#heritage)
+  * [Truly Unified Resource Identifier (URI)](#truly-unified-resource-identifier--uri-)
+    * [The deviation from current URI W3C definition](#the-deviation-from-current-uri-w3c-definition)
+    * [Trust and resources certification](#trust-and-resources-certification)
+  * [Declarative Custom Elements](#declarative-custom-elements)
+    * [Page and DCE](#page-and-dce)
+  * [Module loader and mapping](#module-loader-and-mapping)
+  * [Libraries support](#libraries-support)
+  * [Data Access Layer (DAL)](#data-access-layer--dal-)
+    * [Data Source Declaration](#data-source-declaration)
+      * [Inline data island](#inline-data-island)
+      * [HTTP request](#http-request)
+      * [Storage](#storage)
+    * [Data Request](#data-request-slice)
+    * [Data Response](#data-response-slice)
+  * [Consistent access to object models](#consistent-access-to-object-models)
+  * [Transformation pipeline](#transformation-pipeline)
+    * [Data Request](#data-request)
+    * [Data transformation and UI transformation pipeline](#data-transformation-and-ui-transformation-pipeline)
+    * [DR & DT sharing across transformations](#dr--dt-sharing-across-transformations)
+    * [Strict type check](#strict-type-check)
+    * [Semver on API](#semver-on-api)
+    * [Data Versioning with version change polyfills](#data-versioning-with-version-change-polyfills)
+  * [Templating](#templating)
+  * [Forms](#forms)
+    * [Form states](#form-states)
+    * [Form validation](#form-validation)
+      * [External resources](#external-resources)
+    * [Form output](#form-output)
+* [Links](#links)
 
 
 # Benefits
@@ -57,7 +57,7 @@ and reliability to the platform. Even if the process is not completely supported
 * Web 3.0 multi vendor app portals
 * Embedded devices where memory and CPU resources are limited
 * Internet of Things (IoT) management tools, especially due to backward compatibility polyfills layer.
-* Highly responsive dynamic UI (like video set top box), which require reliability over extended periods of time, and minimized memory allocations and/or * * * multithreaded sub-flows
+* Highly responsive dynamic UI (like video set-top box), which require reliability over extended periods of time, and minimized memory allocations and/or * * * multithreaded sub-flows
 
 ## Security Considerations
 
@@ -73,7 +73,8 @@ Declarative custom elements coupled with other aspects in declarative syntax lea
 * **Data dependencies**: These can be treated in the same fashion as HTML document dependencies, they are synchronized with the HTML loading lifecycle and Document Object Model  (DOM) elements they are a part of. The hydration of UI with associated data would be a browser responsibility and turned on as-needed with platform specifics and runtime considerations taken into account.
 * **Native multithreading**: As data dependencies within transformation are known, data transformation pipelines can be executed in parallel. Various UI components with their own data/dependencies flows can run in their own threads, synchronized only on the dependencies life cycle.
 * **Binary code**: When data and events execution defined as transformation pipeline declaratively and in/out data schema is known, the next logical step is to generate the binary code.
-* **SSR vs transformation pipeline caching**. Any part of the transformation pipeline is serializable and can be stored and later served to become a part of further DWA lifecycle. The whole DWA or one of transformation pipelines sub-chain can be pre-rendered on server side or in browser and cached to be reused without processing again. This process, sometimes called memoization, is applicable as for data as for UI pipelines. Unlike in classic memoization, here it would be just a hint to a system which could free associated resources as needed.
+* **SSR vs transformation pipeline caching**. Any part of the transformation pipeline is serializable and can be stored and later served to become a part of further DWA lifecycle. The whole DWA or one of transformation pipelines sub-chain can be pre-rendered on server side or in browser and cached to be reused without processing again. This process, sometimes called memoization, is applicable as for data as for UI pipelines. Unlike in classic memoization, 
+here it would be just a hint to a system which could free the associated resources as needed.
 
 **Memory**:
 
@@ -111,6 +112,7 @@ It would provide the ability to reuse the HTML 5 templates along with the XSLT c
 
 ## Truly Unified Resource Identifier (URI)  
 A Unified Resource Identifier should be available for consuming resources of all kinds within the current element scope. The resource has to be identifiable when it resides
+
 * on page Document Object Model (DOM) 
 * On module loader for the scope ( say a module ID like NPM package name )
 * On a shared locations on the web (CDNs or web hosts) file
@@ -120,10 +122,12 @@ The perfect sample is a reusable template. When it resides in the page, **#id** 
 
 The URL resolving is a subject for module loader and mapping.
 
-### The deviation from current URI W3C definition
+### The deviation from current [URI W3C](https://www.w3.org/wiki/URI) definition
 In addition to location, the new functionality would assume the reuse of resources and the whole life cycle of loading. The module identifier is a part of URI and given an abstraction of the loading sequence, not the actual location of the resource.
-###Trust and resources certification
+
+### Trust and resources certification
 In addition to usual server connection validation via https, the resources have to be individually verifiable on
+
 * Data integrity level, same as subresource integrity for SCRIPT. This pattern has to be applied to all resources including the DWA descriptor and its parts.
 * Common convention on client side how to retrieve the list of available resource registries and certifications access.
 * Common convention for various digital certificates enumeration on registry and relative to resource location. 
@@ -161,7 +165,7 @@ The certifications of the same type could be done by different vendors and a DWA
 WICG proposal
 
 ### Page and DCE
-As DCE can be embedded into each other and the page, the page is also treated as a top-level DCE. Without templating capabilities it matches HTML 5 exactly, but application and page level data are available to be consumed by transformation instructions. Such page is a Declarative Web Application itself and can be embedded as microapplication into another application allowing creation of portals with fine grained secured application scopes.
+As DCE can be embedded into each other and the page, the page is also treated as a top-level DCE. Without templating capabilities it matches HTML 5 exactly, but application and page level data are available to be consumed by transformation instructions. Such page is a Declarative Web Application itself and can be embedded as microapplication into another application allowing creation of portals with fine-grained secured application scopes.
 
 ## Module loader and mapping
 All resources, including DCE, templates, and bound dependencies like CSS, images, fonts, etc. can be treated as a module with a loader and an import maps resolver. 
@@ -181,14 +185,14 @@ The multiple modules in any tier library (UI, data, transformation) could use th
 DAL life cycle
 1. [Data Source Declaration](#data-source-declaration)
 2. [Data Request](#data-request)
-3. [Data Response](#data-response)
+3. [Data Response](#data-response-slice)
 4. [Transformation Pipeline](#transformation-pipeline)
 
 The [DSD](#data-source-declaration) is used during development and optionally during application load to validate the application code against data schema. IDE would highlight the mismatch in fields, CI/CD validator would do the type errors check. 
 
 [Data Request](#data-request) provides the actual retrieving mechanism and feeds 
 the DSD plus its own data into protocol-dependent request. 
-This request would produce the [Data Response](#data-response) variations.
+This request would produce the [Data Response](#data-response-slice) variations.
 [Transformation Pipeline](#transformation-pipeline) converts the response data into consumable by application format propagated further into components as an input parameter.
 
 It is assumed that data retrieval and initialization would not modify anything in the application and do not change over time. I.e. could even be a JS module exporting JSON data. 
@@ -213,11 +217,11 @@ The current and future data access protocols to be supported. XML/JSON RESTful, 
 #### Storage
 Local/Session/Cookies/DB/Virtual FS are the samples of storage. 
 
-### Data Request
+### Data Request slice
 Is a connection between component or transformation pipeline and [DSD](#data-source-declaration).
 It fills out parameters for retrieval protocol and initiates the data retrieval itself.
 
-### Data Response
+### Data Response slice
 The result of data retrieval is exposed as Data Response. Depending on protocol it could be pure data or combined with response parameters. 
 
 For example, for HTTP protocol it could be network error, HTTP status, response headers, etc. The body would be treated as a result in most cases but interpreted according to response status, content-type and payload. 
@@ -226,7 +230,7 @@ Consumer code (transformation pipeline or component) would consume the result da
 
 
 ## Consistent access to object models
-Whether it is a custom elements registry, the form, or any another object/collection in DWA it should support 
+Whether it is a custom element registry, the form, or any another object/collection in DWA it should support 
 
 * Persistence, i.e. serialization. While the interfaces are meant to be the same, implementations would be able to choose the actual format: binary, shared memory, XML, json or custom like CSV. The streaming-first approach.
 * Objects are treated as immutable. Immutability of objects are essential for
@@ -239,7 +243,7 @@ Whether it is a custom elements registry, the form, or any another object/collec
 ## Transformation pipeline
 The Data Source(**DS**) gives a definition of how the data would be retrieved, validated, and interpreted. DS is a part of template and its parameters are dynamic and during template transformation are filled out from template owner data set.
 
-<img src="./Declarative_Web_Application_stack.svg" width="100%"/>
+<img alt="DWA transformation pipeline diagram" src="./Declarative_Web_Application_stack.svg" width="100%"/>
 
 ### Data Request
 During transformation the Data Source would be instantiated as Data Request(**DR**).
@@ -315,7 +319,7 @@ The states would reflect the lifecycle of the form object. In this cycle the for
 The advanced forms use requires complex validation with data transformation pipeline and verification of form elements against a series of rules.
 
 #### External resources 
-in the form is the usual case, those can be referenced as by direct URL as by some unique ID. The input value would match the ID but the validator has to be capable of 
+in the form are the usual case, those can be referenced as by direct URL as by some unique ID. The input value would match the ID but the validator has to be capable of 
 
 * Injecting the ID into request
 * Define validation rule like 200 HTTP request status or presence of ID in one of response objects
@@ -323,10 +327,11 @@ in the form is the usual case, those can be referenced as by direct URL as by so
 The transformation pipeline which would take the UI values as an input and goes over a series of queries to pass the invalidation rules.
 
 ### Form output
-The form object is the final product of the submit process. Of course this object could be passed to another page via form POST but the primary use is to initiate the transformation pipeline on the page which would lead to the next state of DWA, whether it is a SPA, microapplication, or a portal. 
+The form object is the final product of the submit process. Of course this object could be passed to another page via form POST but the primary use is to initiate the transformation pipeline on the page which would lead to the next state of DWA, whether it is an SPA, microapplication, or a portal. 
 
 # Links
 * [2022 - developing web (with components) should look like in 5 years](https://github.com/EPA-WG/EPA-concept/issues/5)
+* [Declarative custom elements - teaser](https://github.com/w3c/webcomponents-cg/issues/32)
 * https://discourse.wicg.io/c/architecture/13
 * [Google Web Designer](https://webdesigner.withgoogle.com/) - enlist the use cases for DWA
 * List of [HTML as application](http://discourse.wicg.io/t/proposal-html7/5860/9?u=suns) proposals
