@@ -1,6 +1,6 @@
 <h1>Introduction to Declarative Web Applications </h1>
 
-This document provides information on Declarative Web Applications (**DWA**) and how they can benefit web applications created by Web Designers and Content Editors, along with DWA partners, contributors, and [patrons](./PATRONS.md). 
+This document explains the concept of Declarative Web Applications (**DWA**) and how they can benefit web applications created by Web Designers and Content Editors, along with DWA partners, contributors, and [patrons](./PATRONS.md). 
 
 For example, Bluescape would benefit by reducing the attack surface in authentication flows and by making it easier to embed 3rd party apps on the drawing board. A Google Web Designer and Adobe AEM would benefit by having 3rd party injectable apps as an available component when composing own and partner apps.
 
