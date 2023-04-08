@@ -110,6 +110,9 @@ On the shoulders of giants the new web stack would extend the best from HTML5 an
 In particular, it would address the syntax complexity of XSLT and XML namespacing, would provide simple aliasing to the lingual complex constructs, make a clear flow for troubleshooting and discoverability in the transformation flows. 
 It would provide the ability to reuse the HTML 5 templates along with the XSLT codebase with minimal (target none) changes.
 
+# Scopes of control and insulation
+
+
 ## Truly Unified Resource Identifier (URI)  
 A Unified Resource Identifier should be available for consuming resources of all kinds within the current element scope. The resource has to be identifiable when it resides
 
