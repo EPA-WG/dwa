@@ -20,6 +20,7 @@ A declarative approach to web application development (without JavaScript) has a
     * [The deviation from current URI W3C definition](#the-deviation-from-current-uri-w3c-definition)
     * [Trust and resources certification](#trust-and-resources-certification)
   * [Declarative Custom Elements](#declarative-custom-elements)
+    * [DWA, DCE & WC](#dwa-dce--wc) 
     * [Page and DCE](#page-and-dce)
   * [Module loader and mapping](#module-loader-and-mapping)
   * [Libraries support](#libraries-support)
