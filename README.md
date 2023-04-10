@@ -110,7 +110,8 @@ On the shoulders of giants the new web stack would extend the best from HTML5 an
 In particular, it would address the syntax complexity of XSLT and XML namespacing, would provide simple aliasing to the lingual complex constructs, make a clear flow for troubleshooting and discoverability in the transformation flows. 
 It would provide the ability to reuse the HTML 5 templates along with the XSLT codebase with minimal (target none) changes.
 
-# Scopes of control and insulation
+# Scopes insulation and sharing
+Since DWA can be embedded into web page, desktop, and into each other, and be served by different vendors  
 
 
 ## Truly Unified Resource Identifier (URI)  
@@ -143,6 +144,27 @@ In addition to usual server connection validation via https, the resources have 
 The certifications of the same type could be done by different vendors and a DWA descriptor would define the algorithm of trust chain selection and validation.
   
 ## Declarative Custom Elements
+Is the way of embedding DWA into web page.
+
+### DWA, DCE & WC
+DWA is a [microapplication](https://github.com/EPA-WG/EPA-concept/blob/master/microapplication.md)
+when injected into page or another DWA. It is a WC from prospective of container. 
+Only difference between DWA and WC is default insulation rules: 
+DWA injection should not produce any side effects while the ordinary WC has access to
+whole page via JS and some CSS. The Declarative Custom Element should be side effect
+free as DWA. What would be the difference between DWA and DCE than?
+Both can be loaded from external location or from embedded content. Both are side effect free.
+DWA can be instantiated multiple times, DCE is designed for the same. Both can be containers. 
+The life cycle, loading priority, hydration rules are same as well. 
+In other words, DWA and DCE are the same from implementation point of view. 
+Only rhetorical meaning is a denomination.
+
+* The application usually assumed to be self-sufficient and have own business use. 
+* The component is meant to be used in the context of another application along 
+with other ones. But there is no straight line in between
+
+But each of above are interchangeable. DCE could be opened as an application and 
+DWA could be injected multiple times as DCE.
 
 #### High level requirements
 * Self-sufficiency, i.e., completely declarative syntax to support Declarative Web Application concept (no JavaScript)
