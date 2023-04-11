@@ -11,15 +11,23 @@ A declarative approach to web application development (without JavaScript) has a
 # Table of Contents
 * [Benefits](#benefits)
   * [Security Considerations](#security-considerations)
-    * [Performance](#performance)
-      * [Adoptable transformation layers](#adoptable-transformation-layers)
+  * [Performance](#performance)
+    * [Adoptable transformation layers](#adoptable-transformation-layers)
   * [Developer Experience (DX) and Development Efficiency (DE)](#developer-experience--dx--and-development-efficiency--de-)
 * [DWA Stack](#dwa-stack)
-  * [Heritage](#heritage)
+  * [Heritage](#heritage--backward-compatibility)
+  * [Scopes insulation and sharing](#scopes-insulation-and-sharing)
+    * [Tags sharing, insulation and local name mapping](#tags-sharing-insulation-and-local-name-mapping)
+    * [URI symbolic names mapping](#uri-symbolic-names-mapping)
+    * [Data slices insulation and mapping](#data-slices-insulation-and-mapping)
+    * [CSS/styling insulation and sharing](#cssstyling-insulation-and-sharing)
+    * [recursive nature of mapping control](#recursive-nature-of-mapping-control)
+    * [Vendor control over overrides](#vendor-control-over-overrides)
   * [Truly Unified Resource Identifier (URI)](#truly-unified-resource-identifier--uri-)
     * [The deviation from current URI W3C definition](#the-deviation-from-current-uri-w3c-definition)
     * [Trust and resources certification](#trust-and-resources-certification)
   * [Declarative Custom Elements](#declarative-custom-elements)
+    * [DWA, DCE & WC](#dwa-dce--wc) 
     * [Page and DCE](#page-and-dce)
   * [Module loader and mapping](#module-loader-and-mapping)
   * [Libraries support](#libraries-support)
@@ -28,8 +36,8 @@ A declarative approach to web application development (without JavaScript) has a
       * [Inline data island](#inline-data-island)
       * [HTTP request](#http-request)
       * [Storage](#storage)
-    * [Data Request](#data-request-slice)
-    * [Data Response](#data-response-slice)
+    * [Data slice](#data-slice)
+      * [slice structure](#slice-structure)
   * [Consistent access to object models](#consistent-access-to-object-models)
   * [Transformation pipeline](#transformation-pipeline)
     * [Data Request](#data-request)
@@ -105,30 +113,88 @@ Going further the complimentary pipeline layers can be applied only for particul
 * feature flags would alter different transformation flows and finally UI. 
 
 # DWA Stack
-## Heritage
-On the shoulders of giants the new web stack would extend the best from HTML5 and XML/XSLT/XPath. It would account for the mistakes and missing essentials as in dev capabilities as in DX/DE. 
-In particular, it would address the syntax complexity of XSLT and XML namespacing, would provide simple aliasing to the lingual complex constructs, make a clear flow for troubleshooting and discoverability in the transformation flows. 
+## Heritage & backward compatibility
+On the shoulders of giants the new web stack would extend the best from HTML5 and XML/XSLT/XPath. 
+It would account for the mistakes and missing essentials as in dev capabilities as in DX/DE. 
+In particular, it would address the syntax complexity of XSLT and XML namespacing, would provide simple aliasing to the 
+lingual complex constructs, make a clear flow for troubleshooting and discoverability in the transformation flows. 
 It would provide the ability to reuse the HTML 5 templates along with the XSLT codebase with minimal (target none) changes.
 
+## Scopes insulation and sharing
+Since DWA can be embedded into web page, desktop, and into each other, and be served by different vendors, 
+the probability of using same names in tags, import dependencies, and shared properties is very high. To avoid the naming
+collision the locally declared DCE are not available from outside.
+
+### Tags sharing, insulation and local name mapping
+The inner content and embedded DCE/DWA could leverage the declared by host tags and data slots unless 
+explicitly prohibited or defined internally.
+
+There would be a cases of "high order" DCE which would assume the tags are defined externally and referenced by 
+specific tag name inside. The same name can be used by more than one high order DCE but there is a chance that each 
+would need to be served by different DCE. For example the `tile` is a good name as for image preview as for image carousel
+DCE. The container would feed the particular DCE as the `tile` mapping for each. 
+
+While the tags mapping can be implemented as part of individual DCE implementation, the generic protocol and implementation 
+has to be part of DWA implementation as one of security layers. Including ability to block any or particular tag use by
+the owned DCE instance.
+
+### URI symbolic names mapping
+
+Taken the import maps semantics, DWA would implement the dependencies import over
+symbolic naming resolved during load time. 
+
+### Data slices insulation and mapping
+Unless explicitly defined, slices are local in DCE and not exposed in and out. 
+
+Sharing the slices between container and child DCE would be done over explicit slice names mapping.  
+
+### CSS/styling insulation and sharing
+The shadow root provides the good insulation but does not provide simple sharing model. Hence, it needs to be enhanced to
+cover the "scope" level insulation with "common scope"/no insulation option.
+
+The ability to provide the shared in the scope styling is essential for co-existing multiple libraries which would be 
+utilized by subsets of DCEs.
+
+### recursive nature of mapping control
+Whether it is a tags, css, or data slices, the ability to control owned DCE and in-depth others is the default pattern.
+
+For that the section for mapping would have a key (matching either DCE URI of its tag) which would be invoked during the 
+dependent DCE load. 
+
+### Vendor control over overrides
+The DCE/DWA vendor can choose whether to permit or prohibit certain overrides or overall.
+
+For example, prohibit branded colors or request the data slice chain to match the page level one. Container still would 
+be able to declare the intent but the platform would not perform overrides, instead would generate the error state 
+detectable by vendor's DCE. The container also would be able to observe the error state if would make a mapping 
+to own data slice. 
+
 ## Truly Unified Resource Identifier (URI)  
-A Unified Resource Identifier should be available for consuming resources of all kinds within the current element scope. The resource has to be identifiable when it resides
+A Unified Resource Identifier should be available for consuming resources of all kinds within the current element scope. 
+The resource has to be identifiable when it resides
 
 * on page Document Object Model (DOM) 
 * On module loader for the scope ( say a module ID like NPM package name )
 * On a shared locations on the web (CDNs or web hosts) file
 * Within external file along with other resources
 
-The perfect sample is a reusable template. When it resides in the page, **#id** is used to reference the DOM node on the component root or page. This template could be referenced multiple times but the same read-only DOM has to be used for rendering associated HTML without the need for a clone. In case the template is referenced by external to page URLs (domain.io/template.html), its content is loaded once in the same manner as the HTML module. However, when the URL has a hash selector (domain.io/template.html#id), the template would be located within an external document by its ID. 
+The perfect sample is a reusable template. When it resides in the page, **#id** is used to reference the DOM node on the 
+component root or page. This template could be referenced multiple times but the same read-only DOM has to be used for 
+rendering associated HTML without the need for a clone. In case the template is referenced by external to page URLs 
+(domain.io/template.html), its content is loaded once in the same manner as the HTML module. 
+However, when the URL has a hash selector (domain.io/template.html#id), 
+the template would be located within an external document by its ID. 
 
 The URL resolving is a subject for module loader and mapping.
 
 ### The deviation from current [URI W3C](https://www.w3.org/wiki/URI) definition
-In addition to location, the new functionality would assume the reuse of resources and the whole life cycle of loading. The module identifier is a part of URI and given an abstraction of the loading sequence, not the actual location of the resource.
+In addition to location, the new functionality would assume the reuse of resources and the whole life cycle of loading. 
+The module identifier is a part of URI and given an abstraction of the loading sequence, not the actual location of the resource.
 
 ### Trust and resources certification
 In addition to usual server connection validation via https, the resources have to be individually verifiable on
 
-* Data integrity level, same as subresource integrity for SCRIPT. This pattern has to be applied to all resources including the DWA descriptor and its parts.
+* Data integrity level, same as subresource `integrity` for SCRIPT. This pattern has to be applied to all resources including the DWA descriptor and its parts.
 * Common convention on client side how to retrieve the list of available resource registries and certifications access.
 * Common convention for various digital certificates enumeration on registry and relative to resource location. 
 * Variations of certificates would include but not limited to 
@@ -137,9 +203,31 @@ In addition to usual server connection validation via https, the resources have 
   * Test coverage
   * Etc.
 
-The certifications of the same type could be done by different vendors and a DWA descriptor would define the algorithm of trust chain selection and validation.
+The certifications of the same type could be done by different vendors and a DWA descriptor would define the algorithm 
+of trust chain selection and validation.
   
 ## Declarative Custom Elements
+Is the way of embedding DWA into web page.
+
+### DWA, DCE & WC
+DWA is a [microapplication](https://github.com/EPA-WG/EPA-concept/blob/master/microapplication.md)
+when injected into page or another DWA. It is a WC from prospective of container. 
+Only difference between DWA and WC is default insulation rules: 
+DWA injection should not produce any side effects while the ordinary WC has access to
+whole page via JS and some CSS. The Declarative Custom Element should be side effect
+free as DWA. What would be the difference between DWA and DCE than?
+Both can be loaded from external location or from embedded content. Both are side effect free.
+DWA can be instantiated multiple times, DCE is designed for the same. Both can be containers. 
+The life cycle, loading priority, hydration rules are same as well. 
+In other words, DWA and DCE are the same from implementation point of view. 
+Only rhetorical meaning is a denomination.
+
+* The application usually assumed to be self-sufficient and have own business use. 
+* The component is meant to be used in the context of another application along 
+with other ones. But there is no straight line in between
+
+But each of above are interchangeable. DCE could be opened as an application and 
+DWA could be injected multiple times as DCE.
 
 #### High level requirements
 * Self-sufficiency, i.e., completely declarative syntax to support Declarative Web Application concept (no JavaScript)
@@ -176,23 +264,23 @@ The resolved resource could be reused by the platform, and loaded and unloaded a
 The multiple modules in any tier library (UI, data, transformation) could use the same “namespace” for common data, algorithms, web components, and styles. 
 
 ## Data Access Layer (DAL)
-* Reference by URI. The data as runtime resource TBD
-* Data query, query parameters in URI
-* Storage: perhaps exposing local/sessionStorage, virtual file system, and XML/DOM data island
+* Reference by URI or symbolic name resolved by name map and import maps.
+* HTTP query, query parameters in URI. [POC](https://unpkg.com/@epa-wg/custom-element@0.0/demo/http-request.html)
+* Storage: perhaps exposing local/sessionStorage ( [POC](https://unpkg.com/@epa-wg/custom-element@0.0/demo/local-storage.html), virtual file system, and XML/DOM data island
 * Data scope: application, (sub-)domain, library, DOM sub-tree, and namespace
 * Data lifecycle: persistent in app, session, named session, and inline (bound to the owner)
 
 DAL life cycle
 1. [Data Source Declaration](#data-source-declaration)
 2. [Data Request](#data-request)
-3. [Data Response](#data-response-slice)
-4. [Transformation Pipeline](#transformation-pipeline)
+3. [Transformation Pipeline](#transformation-pipeline)
 
 The [DSD](#data-source-declaration) is used during development and optionally during application load to validate the application code against data schema. IDE would highlight the mismatch in fields, CI/CD validator would do the type errors check. 
 
 [Data Request](#data-request) provides the actual retrieving mechanism and feeds 
 the DSD plus its own data into protocol-dependent request. 
-This request would produce the [Data Response](#data-response-slice) variations.
+This request would produce the connection and response variations exposed in same `slice`.
+
 [Transformation Pipeline](#transformation-pipeline) converts the response data into consumable by application format propagated further into components as an input parameter.
 
 It is assumed that data retrieval and initialization would not modify anything in the application and do not change over time. I.e. could even be a JS module exporting JSON data. 
@@ -217,17 +305,30 @@ The current and future data access protocols to be supported. XML/JSON RESTful, 
 #### Storage
 Local/Session/Cookies/DB/Virtual FS are the samples of storage. 
 
-### Data Request slice
-Is a connection between component or transformation pipeline and [DSD](#data-source-declaration).
-It fills out parameters for retrieval protocol and initiates the data retrieval itself.
+### Data slice
+`slice` is only mechanism of data access by DCE. The data slice set is tied to DCE as a scope root which assures the 
+no side effect behavior. All data exposed in own named slice. When data change over DCE API, the slice is updated after 
+completion of current transformation cycle. That makes the data set immutable during transformation and the chain of
+related changes. If the data modified after transformation cycle, the transformation is triggered again. The number of 
+sequential transformations would be limited with warning to avoid the deadlock/infinite loop.
 
-### Data Response slice
-The result of data retrieval is exposed as Data Response. Depending on protocol it could be pure data or combined with response parameters. 
+`slice` is a connection between component or transformation pipeline and [DSD](#data-source-declaration).
+It fills out parameters for retrieval protocol and initiates the data retrieval itself, keeps the intermediate and final 
+slice process state.
 
-For example, for HTTP protocol it could be network error, HTTP status, response headers, etc. The body would be treated as a result in most cases but interpreted according to response status, content-type and payload. 
+
+#### slice structure
+Would depend on the data source type. It can hold/reference just immediate data for synchronous API like `localStorage`
+or state of whole data retrieval process with request parameters, connection state, transfer progress, response data as
+in `http-request`.
+
+The result of data retrieval is exposed as Data Response. Depending on protocol it could be pure data or combined 
+with response parameters. 
+
+For example, for HTTP protocol it could be network error, HTTP status, response headers, etc. The body would be treated 
+as a result in most cases but interpreted according to response status, content-type and payload. 
 
 Consumer code (transformation pipeline or component) would consume the result data.
-
 
 ## Consistent access to object models
 Whether it is a custom element registry, the form, or any another object/collection in DWA it should support 
